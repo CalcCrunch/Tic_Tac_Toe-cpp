@@ -1,4 +1,4 @@
-# Tic_Tac_Toe-cpp
+# Tic-Tac-Toe Game!
 Simple tic-tac-toe game w/ minimax algo
 - Current iteration is a 2 player, turn-based game
 - Follows traditional rules of tic-tac-toe
