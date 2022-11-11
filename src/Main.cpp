@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 /*
@@ -8,6 +9,14 @@ Resources: https://gsurma.medium.com/tic-tac-toe-creating-unbeatable-ai-with-min
 https://www.stechies.com/tic-tac-toe-cpp/
 */
 
+/*
+Possible extensions as of now:
+- Implement minimax algorithm
+- Convert from 2 player game to 1 player vs AI
+- Better UI
+- Modularize and place into different classes
+- Utilize polymporphism/inheritance and h file integration
+*/
 
 // Global Variables
 char user_answer;
@@ -16,6 +25,8 @@ char turn = 'X';
 int choice;
 int row, column;
 bool draw = false;
+bool endGame = false;
+int numMoves = 0;
 
 
 //forward declarations
@@ -45,6 +56,7 @@ void displayBoard()
 
 void playerTurn()
 {
+
     if (turn == 'X') {
         cout << "Your [X] turn: " << endl;
         cout << "Input a number ('1' - '9') to indicate the square you want to mark" << endl;
@@ -94,10 +106,12 @@ void playerTurn()
         board[row][column] = 'O';
         turn = 'X';
     } else {
+        cout << endl;
         cout << "Position is already occupied. Please try again." << endl;
+        cout << endl;
         playerTurn();
     }
-
+    ++numMoves;
     displayBoard();
 }
 
@@ -140,7 +154,7 @@ void validateInput()
             cout << "***Commence Game***" << endl;
             cout << endl;
         } else if (user_answer == 'n' || user_answer == 'N') {
-            cout << "Goodbye!" << endl;
+            endGame = true;
         } else {
             cout << "Invalid input. Try again." << endl;
         }
@@ -159,21 +173,38 @@ int main()
 {
     validateInput();
 
-    while (gameOver()) {
+    while (gameOver() && !endGame) {
         displayBoard();
         playerTurn();
+        system("cls");
         gameOver();
+        if (numMoves == 9) {
+            cout << "It's a draw!" << endl;
+            break;
+        }
     }
 
-    if (turn == 'O' && draw == false) {
+    if (!endGame && turn == 'O' && draw == false) {
         cout << "Congratulations, you have won!" << endl;
-    } else if (turn == 'X' && draw == false) {
+    } else if (!endGame && turn == 'X' && draw == false) {
         cout << "Unfortunately, the Computer has won (as expected)." << endl;
-    } else {
-        cout << "It's a draw!" << endl;
     }
     cout << endl;
-    cout << "Thanks for playing!" << endl;
+    if (!endGame) {
+        cout << "Thanks for playing!" << endl;
+        cout << "Would you like to play again (y/n)?" << endl;
+        char s;
+        cin >> s;
+        if (s == 'y') {
+            main();
+        } else {
+            cout << endl;
+            cout << "Goodbye now!" << endl;
+        }
+    } else {
+        cout << "Lol why did you even run this program then?? Anyway, cya!" << endl;
+    }
+
     return 0;
 }
 
